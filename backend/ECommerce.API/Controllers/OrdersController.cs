@@ -258,8 +258,8 @@ public class OrdersController : ControllerBase
                 var order = await _unitOfWork.Orders.GetByIdAsync(request.OrderId);
                 if (order != null)
                 {
-                    order.Status = OrderStatus.Processing;
-                    order.PaymentStatus = PaymentStatus.Paid;
+                    order.Status = OrderStatus.Paid;
+                    order.PaidAt = DateTime.UtcNow;
                     await _unitOfWork.Orders.UpdateAsync(order);
                     await _unitOfWork.SaveChangesAsync();
 
@@ -268,10 +268,8 @@ public class OrdersController : ControllerBase
                     {
                         await _emailService.SendOrderConfirmationAsync(
                             order.User.Email,
-                            order.User.FullName,
                             order.OrderNumber,
-                            order.TotalAmount,
-                            order.OrderDate
+                            order.TotalAmount
                         );
                     }
                     catch (Exception emailEx)
