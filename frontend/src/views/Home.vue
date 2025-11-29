@@ -17,12 +17,12 @@
           Discover our collection of premium cosmetics at the best prices
         </p>
         <div class="mt-10">
-          <router-link
-            to="/products"
+          <button
+            @click="handleShopNow"
             class="inline-block bg-white py-3 px-8 border border-transparent rounded-md text-base font-medium text-indigo-600 hover:bg-indigo-50"
           >
             Shop Now
-          </router-link>
+          </button>
         </div>
       </div>
     </div>
@@ -128,11 +128,23 @@
 import { ref, onMounted } from 'vue'
 import ProductCard from '../components/ProductCard.vue'
 import api from '../services/api'
+import { useAuthStore } from '../stores/auth'
+import { useRouter } from 'vue-router'
 
+const authStore = useAuthStore()
+const router = useRouter()
 const featuredProducts = ref([])
 const categories = ref([])
 const loading = ref(true)
 const categoriesLoading = ref(true)
+
+const handleShopNow = () => {
+  if (!authStore.isAuthenticated) {
+    router.push('/login')
+    return
+  }
+  router.push('/products')
+}
 
 const loadFeaturedProducts = async () => {
   loading.value = true

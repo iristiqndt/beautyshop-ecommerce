@@ -36,7 +36,7 @@
         :disabled="product.stockQuantity === 0 || adding"
         class="w-full bg-indigo-600 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {{ adding ? 'Đang thêm...' : 'Thêm vào giỏ' }}
+        {{ adding ? 'Adding...' : 'Add to Cart' }}
       </button>
     </div>
   </div>

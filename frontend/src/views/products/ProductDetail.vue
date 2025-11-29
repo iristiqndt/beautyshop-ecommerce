@@ -117,12 +117,13 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCartStore } from '../../stores/cart'
 import { useAuthStore } from '../../stores/auth'
 import api from '../../services/api'
 
 const route = useRoute()
+const router = useRouter()
 const cartStore = useCartStore()
 const authStore = useAuthStore()
 
@@ -149,6 +150,11 @@ const decreaseQuantity = () => {
 }
 
 const addToCart = async () => {
+  if (!authStore.isAuthenticated) {
+    router.push('/login')
+    return
+  }
+
   addingToCart.value = true
   addedToCart.value = false
   
