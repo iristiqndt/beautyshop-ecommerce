@@ -61,6 +61,30 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/payment/success',
+      name: 'payment-success',
+      component: () => import('../views/PaymentSuccess.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/payment/cancel',
+      name: 'payment-cancel',
+      component: () => import('../views/PaymentCancel.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/payment/paypal/success',
+      name: 'paypal-success',
+      component: () => import('../views/PaymentSuccess.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/payment/paypal/cancel',
+      name: 'paypal-cancel',
+      component: () => import('../views/PaymentCancel.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/order-success/:orderNumber',
       name: 'order-success',
       component: () => import('../views/OrderSuccess.vue'),

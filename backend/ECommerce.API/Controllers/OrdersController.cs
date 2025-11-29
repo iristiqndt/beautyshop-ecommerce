@@ -2,6 +2,7 @@ using ECommerce.Application.DTOs.Order;
 using ECommerce.Application.Interfaces;
 using ECommerce.Domain.Entities;
 using ECommerce.Domain.Interfaces;
+using ECommerce.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -15,17 +16,20 @@ public class OrdersController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPaymentService _paymentService;
+    private readonly PayPalPaymentService _paypalService;
     private readonly IEmailService _emailService;
     private readonly ILogger<OrdersController> _logger;
 
     public OrdersController(
         IUnitOfWork unitOfWork,
         IPaymentService paymentService,
+        PayPalPaymentService paypalService,
         IEmailService emailService,
         ILogger<OrdersController> logger)
     {
         _unitOfWork = unitOfWork;
         _paymentService = paymentService;
+        _paypalService = paypalService;
         _emailService = emailService;
         _logger = logger;
     }
@@ -204,7 +208,82 @@ public class OrdersController : ControllerBase
 
             var checkoutUrl = await _paymentService.CreateCheckoutSessionAsync(orderId, successUrl, cancelUrl);
 
-            return Ok(new { checkoutUrl });
+            return Ok(new { url = checkoutUrl });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{orderId}/paypal")]
+    public async Task<IActionResult> CreatePayPalOrder(int orderId)
+    {
+        try
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var order = await _unitOfWork.Orders.GetByIdAsync(orderId);
+
+            if (order == null)
+                return NotFound();
+
+            if (order.UserId != userId)
+                return Forbid();
+
+            if (order.Status != OrderStatus.Pending)
+                return BadRequest(new { message = "Order already processed" });
+
+            var returnUrl = $"{Request.Scheme}://{Request.Host}/payment/paypal/success";
+            var cancelUrl = $"{Request.Scheme}://{Request.Host}/payment/paypal/cancel";
+
+            var approvalUrl = await _paypalService.CreatePayPalOrderAsync(orderId, returnUrl, cancelUrl);
+
+            return Ok(new { approvalUrl });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("paypal/capture")]
+    public async Task<IActionResult> CapturePayPalPayment([FromBody] PayPalCaptureRequest request)
+    {
+        try
+        {
+            var success = await _paypalService.CapturePayPalPaymentAsync(request.PayPalOrderId);
+
+            if (success && request.OrderId > 0)
+            {
+                var order = await _unitOfWork.Orders.GetByIdAsync(request.OrderId);
+                if (order != null)
+                {
+                    order.Status = OrderStatus.Processing;
+                    order.PaymentStatus = PaymentStatus.Paid;
+                    await _unitOfWork.Orders.UpdateAsync(order);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    // Send confirmation email
+                    try
+                    {
+                        await _emailService.SendOrderConfirmationAsync(
+                            order.User.Email,
+                            order.User.FullName,
+                            order.OrderNumber,
+                            order.TotalAmount,
+                            order.OrderDate
+                        );
+                    }
+                    catch (Exception emailEx)
+                    {
+                        _logger.LogError(emailEx, "Failed to send order confirmation email");
+                    }
+
+                    return Ok(new { success = true, orderNumber = order.OrderNumber });
+                }
+            }
+
+            return BadRequest(new { message = "Payment capture failed" });
         }
         catch (Exception ex)
         {

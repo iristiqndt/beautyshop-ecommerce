@@ -237,29 +237,29 @@ const handleCheckout = async () => {
     const response = await api.post('/orders/create', orderData)
     console.log('Order created successfully:', response.data)
     
-    // Backend automatically clears cart, fetch updated cart
-    console.log('Fetching updated cart...')
-    await cartStore.fetchCart()
-    console.log('Cart items after order:', cartStore.items)
+    const orderId = response.data.id
     
-    // If Stripe or PayPal, redirect to payment
+    // If Stripe, redirect to Stripe checkout
     if (form.value.paymentMethod === 'Stripe') {
-      // Create Stripe checkout session
-      const checkoutResponse = await api.post(`/orders/${response.data.id}/checkout`)
+      const checkoutResponse = await api.post(`/orders/${orderId}/checkout`)
       if (checkoutResponse.data.url) {
         window.location.href = checkoutResponse.data.url
         return
       }
-    } else if (form.value.paymentMethod === 'PayPal') {
-      // Create PayPal order
-      const paypalResponse = await api.post(`/orders/${response.data.id}/paypal`)
+    } 
+    // If PayPal, redirect to PayPal
+    else if (form.value.paymentMethod === 'PayPal') {
+      const paypalResponse = await api.post(`/orders/${orderId}/paypal`)
       if (paypalResponse.data.approvalUrl) {
+        // Redirect directly to PayPal (return URL is already set in backend)
         window.location.href = paypalResponse.data.approvalUrl
         return
       }
     }
     
-    // Redirect to success page
+    // For COD, clear cart and redirect to success
+    await cartStore.fetchCart()
+    
     router.push({
       name: 'order-success',
       params: { orderNumber: response.data.orderNumber }
