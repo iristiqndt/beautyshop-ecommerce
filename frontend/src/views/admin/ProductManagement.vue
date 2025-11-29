@@ -35,7 +35,7 @@
             <tr v-for="product in products" :key="product.id">
               <td class="px-6 py-4">
                 <img 
-                  :src="product.imageUrl || 'https://via.placeholder.com/100'" 
+                  :src="product.imageUrl || 'https://placehold.co/100x100/e5e7eb/6b7280?text=No+Image'" 
                   :alt="product.name"
                   class="w-16 h-16 object-cover rounded"
                 />

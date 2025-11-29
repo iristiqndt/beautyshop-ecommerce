@@ -146,7 +146,7 @@
             <ul class="divide-y divide-gray-200 mb-4">
               <li v-for="item in cartStore.items" :key="item.id" class="py-4 flex">
                 <img
-                  :src="item.imageUrl || 'https://via.placeholder.com/80'"
+                  :src="item.imageUrl || 'https://placehold.co/80x80/e5e7eb/6b7280?text=No+Image'"
                   :alt="item.productName"
                   class="w-16 h-16 rounded-md object-cover"
                 />

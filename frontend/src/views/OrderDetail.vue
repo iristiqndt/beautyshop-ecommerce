@@ -34,9 +34,9 @@
               <div class="flex">
                 <div class="flex-shrink-0">
                   <img
-                    :src="item.product?.imageUrl || 'https://via.placeholder.com/150'"
+                    :src="item.product?.imageUrl || 'https://placehold.co/150x150/e5e7eb/6b7280?text=No+Image'"
                     :alt="item.product?.name"
-                    class="w-20 h-20 rounded-md object-cover"
+                    class="w-24 h-24 rounded-md object-cover"
                   />
                 </div>
                 <div class="ml-6 flex-1">

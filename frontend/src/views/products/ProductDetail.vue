@@ -30,7 +30,7 @@
         <div class="flex flex-col">
           <div class="w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden">
             <img
-              :src="product.imageUrl || 'https://via.placeholder.com/600'"
+              :src="product.imageUrl || 'https://placehold.co/600x600/e5e7eb/6b7280?text=No+Image'"
               :alt="product.name"
               class="w-full h-full object-center object-cover"
             />

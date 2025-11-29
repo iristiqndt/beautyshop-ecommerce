@@ -2,7 +2,7 @@
   <div class="group relative">
     <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden">
       <img
-        :src="product.imageUrl || 'https://via.placeholder.com/300'"
+        :src="product.imageUrl || 'https://placehold.co/300x300/e5e7eb/6b7280?text=No+Image'"
         :alt="product.name"
         class="w-full h-64 object-center object-cover group-hover:opacity-75 transition"
       />

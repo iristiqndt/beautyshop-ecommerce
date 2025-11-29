@@ -71,7 +71,7 @@
         >
           <div class="aspect-w-1 aspect-h-1">
             <img
-              :src="category.imageUrl || 'https://via.placeholder.com/200'"
+              :src="category.imageUrl || 'https://placehold.co/200x200/e5e7eb/6b7280?text=Category'"
               :alt="category.name"
               class="object-cover w-full h-40"
             />
