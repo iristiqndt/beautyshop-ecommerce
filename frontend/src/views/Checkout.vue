@@ -84,23 +84,6 @@
 
                 <div class="flex items-center">
                   <input
-                    id="stripe"
-                    v-model="form.paymentMethod"
-                    type="radio"
-                    value="Stripe"
-                    class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                  />
-                  <label for="stripe" class="ml-3 flex items-center text-sm font-medium text-gray-700">
-                    Thanh toán bằng thẻ Visa/Mastercard
-                    <svg class="ml-2 h-8 w-auto" viewBox="0 0 48 32" xmlns="http://www.w3.org/2000/svg">
-                      <rect width="48" height="32" rx="4" fill="#1434CB"/>
-                      <text x="24" y="20" text-anchor="middle" fill="white" font-size="12" font-weight="bold">VISA</text>
-                    </svg>
-                  </label>
-                </div>
-
-                <div class="flex items-center">
-                  <input
                     id="paypal"
                     v-model="form.paymentMethod"
                     type="radio"
@@ -239,16 +222,8 @@ const handleCheckout = async () => {
     
     const orderId = response.data.id
     
-    // If Stripe, redirect to Stripe checkout
-    if (form.value.paymentMethod === 'Stripe') {
-      const checkoutResponse = await api.post(`/orders/${orderId}/checkout`)
-      if (checkoutResponse.data.url) {
-        window.location.href = checkoutResponse.data.url
-        return
-      }
-    } 
     // If PayPal, redirect to PayPal
-    else if (form.value.paymentMethod === 'PayPal') {
+    if (form.value.paymentMethod === 'PayPal') {
       const paypalResponse = await api.post(`/orders/${orderId}/paypal`)
       if (paypalResponse.data.approvalUrl) {
         // Redirect directly to PayPal (return URL is already set in backend)
