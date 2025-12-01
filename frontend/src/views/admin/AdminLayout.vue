@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <AdminNav />
+  <div class="min-h-screen bg-gray-100">
     <router-view />
   </div>
 </template>
 
 <script setup>
-import AdminNav from '../../components/AdminNav.vue'
 </script>

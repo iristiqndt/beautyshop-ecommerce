@@ -194,12 +194,12 @@ const form = ref({
   notes: ''
 })
 
-const shippingFee = ref(30000)
+const shippingFee = ref(1)
 const processing = ref(false)
 const error = ref('')
 
 const formatPrice = (price) => {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
 }
 
 const handleCheckout = async () => {

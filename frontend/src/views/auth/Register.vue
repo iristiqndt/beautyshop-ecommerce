@@ -135,10 +135,8 @@ const handleRegister = async () => {
   })
   
   if (result.success) {
-    success.value = 'Đăng ký thành công! Đang chuyển hướng...'
-    setTimeout(() => {
-      router.push('/')
-    }, 1500)
+    success.value = 'Registration successful! Redirecting...'
+    router.push('/')
   } else {
     error.value = result.error
   }

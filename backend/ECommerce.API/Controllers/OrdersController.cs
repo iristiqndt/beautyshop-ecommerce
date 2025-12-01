@@ -15,20 +15,17 @@ namespace ECommerce.API.Controllers;
 public class OrdersController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IPaymentService _paymentService;
     private readonly PayPalPaymentService _paypalService;
     private readonly IEmailService _emailService;
     private readonly ILogger<OrdersController> _logger;
 
     public OrdersController(
         IUnitOfWork unitOfWork,
-        IPaymentService paymentService,
         PayPalPaymentService paypalService,
         IEmailService emailService,
         ILogger<OrdersController> logger)
     {
         _unitOfWork = unitOfWork;
-        _paymentService = paymentService;
         _paypalService = paypalService;
         _emailService = emailService;
         _logger = logger;
@@ -108,7 +105,7 @@ public class OrdersController : ControllerBase
                 ShippingPhone = request.ShippingPhone,
                 RecipientName = request.RecipientName,
                 PaymentMethod = request.PaymentMethod,
-                ShippingFee = 5.00m, // Fixed shipping fee
+                ShippingFee = 1.00m, // Fixed shipping fee $1
                 TaxAmount = 0,
                 TotalAmount = 0
             };
@@ -186,36 +183,6 @@ public class OrdersController : ControllerBase
         }
     }
 
-    [HttpPost("{orderId}/checkout")]
-    public async Task<IActionResult> CreateCheckoutSession(int orderId)
-    {
-        try
-        {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var order = await _unitOfWork.Orders.GetByIdAsync(orderId);
-
-            if (order == null)
-                return NotFound();
-
-            if (order.UserId != userId)
-                return Forbid();
-
-            if (order.Status != OrderStatus.Pending)
-                return BadRequest(new { message = "Order already processed" });
-
-            var successUrl = $"{Request.Scheme}://{Request.Host}/payment/success?session_id={{CHECKOUT_SESSION_ID}}";
-            var cancelUrl = $"{Request.Scheme}://{Request.Host}/payment/cancel";
-
-            var checkoutUrl = await _paymentService.CreateCheckoutSessionAsync(orderId, successUrl, cancelUrl);
-
-            return Ok(new { url = checkoutUrl });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
     [HttpPost("{orderId}/paypal")]
     public async Task<IActionResult> CreatePayPalOrder(int orderId)
     {
@@ -233,8 +200,8 @@ public class OrdersController : ControllerBase
             if (order.Status != OrderStatus.Pending)
                 return BadRequest(new { message = "Order already processed" });
 
-            var returnUrl = $"{Request.Scheme}://{Request.Host}/payment/paypal/success";
-            var cancelUrl = $"{Request.Scheme}://{Request.Host}/payment/paypal/cancel";
+            var returnUrl = $"http://localhost:5173/payment-success?orderId={orderId}";
+            var cancelUrl = $"http://localhost:5173/payment-cancel?orderId={orderId}";
 
             var approvalUrl = await _paypalService.CreatePayPalOrderAsync(orderId, returnUrl, cancelUrl);
 

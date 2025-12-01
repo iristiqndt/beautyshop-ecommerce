@@ -25,9 +25,7 @@ public class Order : BaseEntity
     public string RecipientName { get; set; } = string.Empty;
     
     // Payment Information
-    public string? PaymentMethod { get; set; } // Stripe
-    public string? StripeSessionId { get; set; }
-    public string? StripePaymentIntentId { get; set; }
+    public string? PaymentMethod { get; set; } // PayPal, COD
     public DateTime? PaidAt { get; set; }
     
     // Foreign Keys

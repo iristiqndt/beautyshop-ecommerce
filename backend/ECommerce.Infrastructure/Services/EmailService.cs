@@ -46,6 +46,7 @@ public class EmailService : IEmailService
             message.Body = bodyBuilder.ToMessageBody();
 
             using var client = new SmtpClient();
+            client.Timeout = 10000; // 10 seconds timeout
             
             _logger.LogInformation($"Connecting to SMTP server {smtpServer}:{smtpPort}");
             

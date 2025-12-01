@@ -39,14 +39,6 @@ public class OrderRepository : Repository<Order>, IOrderRepository
             .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber);
     }
 
-    public async Task<Order?> GetByStripeSessionIdAsync(string sessionId)
-    {
-        return await _dbSet
-            .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Product)
-            .FirstOrDefaultAsync(o => o.StripeSessionId == sessionId);
-    }
-
     public async Task<IEnumerable<Order>> GetByStatusAsync(OrderStatus status)
     {
         return await _dbSet

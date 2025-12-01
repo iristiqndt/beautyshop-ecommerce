@@ -317,9 +317,9 @@ const deleteProduct = async (id) => {
 }
 
 const formatPrice = (price) => {
-  return new Intl.NumberFormat('vi-VN', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'VND'
+    currency: 'USD'
   }).format(price)
 }
 </script>

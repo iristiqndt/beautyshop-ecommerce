@@ -47,6 +47,6 @@ public class CreateOrderRequest
     public string ShippingCity { get; set; } = string.Empty;
     public string ShippingPhone { get; set; } = string.Empty;
     public string RecipientName { get; set; } = string.Empty;
-    public string PaymentMethod { get; set; } = "COD"; // COD, Stripe, PayPal
+    public string PaymentMethod { get; set; } = "COD"; // COD, PayPal
     public string? Notes { get; set; }
 }

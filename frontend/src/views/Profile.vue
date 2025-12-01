@@ -167,9 +167,16 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
+import { useRouter } from 'vue-router'
 import api from '../services/api'
 
 const authStore = useAuthStore()
+const router = useRouter()
+
+// Redirect admin to admin panel
+if (authStore.isAdmin) {
+  router.push('/admin/products')
+}
 
 const currentTab = ref('profile')
 

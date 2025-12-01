@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["...", "dotnet-sdk_8"]
+
+[phases.build]
+cmds = ["dotnet restore", "dotnet publish ECommerce.API/ECommerce.API.csproj -c Release -o out"]
+
+[start]
+cmd = "cd out && dotnet ECommerce.API.dll"

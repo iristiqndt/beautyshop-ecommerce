@@ -1,30 +1,30 @@
 <template>
   <div class="bg-white min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h1 class="text-4xl font-bold text-gray-900 mb-8">Về chúng tôi</h1>
+      <h1 class="text-4xl font-bold text-gray-900 mb-8">About Us</h1>
       
       <div class="prose prose-lg max-w-none">
         <p class="text-lg text-gray-700 mb-6">
-          Chào mừng bạn đến với cửa hàng mỹ phẩm trực tuyến của chúng tôi!
+          Welcome to our online beauty shop!
         </p>
         
         <p class="text-gray-700 mb-4">
-          Chúng tôi chuyên cung cấp các sản phẩm mỹ phẩm chất lượng cao từ các thương hiệu nổi tiếng trên thế giới. 
-          Với đội ngũ tư vấn viên giàu kinh nghiệm, chúng tôi cam kết mang đến cho bạn những sản phẩm tốt nhất 
-          phù hợp với nhu cầu làm đẹp của bạn.
+          We specialize in providing high-quality cosmetic products from world-renowned brands. 
+          With our team of experienced consultants, we are committed to bringing you the best products 
+          that suit your beauty needs.
         </p>
         
-        <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Sứ mệnh</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Our Mission</h2>
         <p class="text-gray-700 mb-4">
-          Mang đến vẻ đẹp tự nhiên và sự tự tin cho mọi người thông qua các sản phẩm mỹ phẩm chất lượng cao.
+          To bring natural beauty and confidence to everyone through high-quality cosmetic products.
         </p>
         
-        <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Giá trị cốt lõi</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Core Values</h2>
         <ul class="list-disc list-inside text-gray-700 space-y-2">
-          <li>Chất lượng sản phẩm được đảm bảo 100%</li>
-          <li>Tư vấn chuyên nghiệp và tận tâm</li>
-          <li>Giao hàng nhanh chóng, an toàn</li>
-          <li>Chính sách đổi trả linh hoạt</li>
+          <li>100% guaranteed product quality</li>
+          <li>Professional and dedicated consultation</li>
+          <li>Fast and safe delivery</li>
+          <li>Flexible return policy</li>
         </ul>
       </div>
     </div>

@@ -75,7 +75,6 @@
                     Chi tiết
                   </button>
                   <button 
-                    v-if="order.status === 'Pending' || order.status === 'Processing'"
                     @click="openStatusModal(order)"
                     class="text-blue-600 hover:text-blue-900"
                   >
@@ -246,9 +245,9 @@ const getStatusText = (status) => {
 }
 
 const formatPrice = (price) => {
-  return new Intl.NumberFormat('vi-VN', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'VND'
+    currency: 'USD'
   }).format(price)
 }
 

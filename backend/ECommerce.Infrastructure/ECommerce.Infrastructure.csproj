@@ -24,7 +24,6 @@
     </PackageReference>
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="CloudinaryDotNet" Version="1.26.2" />
-    <PackageReference Include="Stripe.net" Version="45.14.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
   </ItemGroup>
 

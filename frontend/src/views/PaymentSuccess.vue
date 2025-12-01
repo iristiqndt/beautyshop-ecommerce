@@ -91,15 +91,7 @@ onMounted(async () => {
       error.value = err.response?.data?.message || 'Payment processing failed'
     }
   } else {
-    // Stripe payment or other
-    const sessionId = route.query.session_id
-    if (sessionId) {
-      // Handle Stripe success
-      success.value = true
-      // You can verify with backend if needed
-    } else {
-      error.value = 'Invalid payment session'
-    }
+    error.value = 'Invalid payment session'
   }
   
   loading.value = false

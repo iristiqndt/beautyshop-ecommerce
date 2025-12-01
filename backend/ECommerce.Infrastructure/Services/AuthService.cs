@@ -65,16 +65,18 @@ public class AuthService : IAuthService
         await _unitOfWork.Carts.AddAsync(cart);
         await _unitOfWork.SaveChangesAsync();
 
-        // Try to send confirmation email (don't fail registration if email fails)
-        try
+        // Send confirmation email in background (fire-and-forget)
+        _ = Task.Run(async () =>
         {
-            await _emailService.SendRegistrationConfirmationAsync(user.Email, user.FullName);
-        }
-        catch (Exception)
-        {
-            // Log error but continue with registration
-            // Email will be sent later or user can request resend
-        }
+            try
+            {
+                await _emailService.SendRegistrationConfirmationAsync(user.Email, user.FullName);
+            }
+            catch
+            {
+                // Silently fail - email is not critical
+            }
+        });
 
         // Generate JWT token
         var token = GenerateJwtToken(user, userRole.Name);

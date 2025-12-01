@@ -119,28 +119,31 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/admin/users',
-      name: 'admin-users',
-      component: () => import('../views/admin/UserManagement.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true }
-    },
-    {
-      path: '/admin/categories',
-      name: 'admin-categories',
-      component: () => import('../views/admin/CategoryManagement.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true }
-    },
-    {
-      path: '/admin/products',
-      name: 'admin-products',
-      component: () => import('../views/admin/ProductManagement.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true }
-    },
-    {
-      path: '/admin/orders',
-      name: 'admin-orders',
-      component: () => import('../views/admin/OrderManagement.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true }
+      path: '/admin',
+      component: () => import('../views/admin/AdminLayout.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+      children: [
+        {
+          path: 'users',
+          name: 'admin-users',
+          component: () => import('../views/admin/UserManagement.vue')
+        },
+        {
+          path: 'categories',
+          name: 'admin-categories',
+          component: () => import('../views/admin/CategoryManagement.vue')
+        },
+        {
+          path: 'products',
+          name: 'admin-products',
+          component: () => import('../views/admin/ProductManagement.vue')
+        },
+        {
+          path: 'orders',
+          name: 'admin-orders',
+          component: () => import('../views/admin/OrderManagement.vue')
+        }
+      ]
     }
   ]
 })

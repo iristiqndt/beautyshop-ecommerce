@@ -95,12 +95,12 @@
 
               <div class="flex justify-between text-base text-gray-900">
                 <p>Shipping Fee</p>
-                <p>{{ formatPrice(30000) }}</p>
+                <p>{{ formatPrice(1) }}</p>
               </div>
 
               <div class="border-t border-gray-200 pt-4 flex justify-between text-lg font-medium text-gray-900">
                 <p>Total</p>
-                <p>{{ formatPrice(cartStore.total + 30000) }}</p>
+                <p>{{ formatPrice(cartStore.total + 1) }}</p>
               </div>
             </div>
 
@@ -133,7 +133,7 @@ const cartStore = useCartStore()
 const loading = ref(true)
 
 const formatPrice = (price) => {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
 }
 
 const updateQuantity = async (itemId, quantity) => {

@@ -83,7 +83,7 @@
               </div>
               <div class="flex justify-between">
                 <dt class="text-gray-500">Shipping Fee</dt>
-                <dd class="text-gray-900">{{ formatPrice(30000) }}</dd>
+                <dd class="text-gray-900">{{ formatPrice(1) }}</dd>
               </div>
               <div class="flex justify-between pt-2 border-t border-gray-200">
                 <dt class="font-medium text-gray-900">Total</dt>
@@ -146,7 +146,7 @@ const backToOrdersRoute = computed(() => {
 })
 
 const formatPrice = (price) => {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
 }
 
 const formatDate = (date) => {
@@ -184,8 +184,7 @@ const getStatusText = (status) => {
 const getPaymentMethodText = (method) => {
   const methods = {
     'COD': 'Thanh toán khi nhận hàng',
-    'Card': 'Thanh toán bằng thẻ',
-    'Stripe': 'Thanh toán qua Stripe'
+    'PayPal': 'Thanh toán qua PayPal'
   }
   return methods[method] || method
 }

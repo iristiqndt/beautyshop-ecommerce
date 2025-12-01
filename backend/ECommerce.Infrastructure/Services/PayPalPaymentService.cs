@@ -63,6 +63,10 @@ public class PayPalPaymentService
 
         var accessToken = await GetAccessTokenAsync();
 
+        // Convert VND to USD (1 USD ≈ 25,000 VND), ensure minimum $0.01
+        var amountInUsd = Math.Max(0.01m, order.TotalAmount / 25000m);
+        var amountString = amountInUsd.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+
         var orderRequest = new
         {
             intent = "CAPTURE",
@@ -75,7 +79,7 @@ public class PayPalPaymentService
                     amount = new
                     {
                         currency_code = "USD",
-                        value = (order.TotalAmount / 25000).ToString("F2") // Convert VND to USD (approximate rate)
+                        value = amountString
                     }
                 }
             },

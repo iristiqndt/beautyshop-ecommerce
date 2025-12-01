@@ -87,7 +87,7 @@ const orders = ref([])
 const loading = ref(true)
 
 const formatPrice = (price) => {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
 }
 
 const formatDate = (date) => {
