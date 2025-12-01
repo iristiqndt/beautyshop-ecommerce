@@ -60,7 +60,7 @@ if (!string.IsNullOrEmpty(databaseUrl))
     // Railway PostgreSQL format: postgres://user:password@host:port/database
     // Convert to Npgsql format
     var uri = new Uri(databaseUrl);
-    var postgresConnectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.Trim('/')};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SSL Mode=Prefer;Trust Server Certificate=true";
+    var postgresConnectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.Trim('/')};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SSL Mode=Disable";
     
     builder.Services.AddDbContext<ECommerceDbContext>(options =>
         options.UseNpgsql(postgresConnectionString,
