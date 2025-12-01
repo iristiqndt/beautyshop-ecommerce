@@ -148,9 +148,6 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ECommerceDbContext>();
-        // Temporarily skip migration for Railway PostgreSQL setup
-        // await context.Database.MigrateAsync();
-        
         // Ensure database is created
         await context.Database.EnsureCreatedAsync();
         
@@ -161,6 +158,7 @@ using (var scope = app.Services.CreateScope())
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred while setting up the database.");
+        // Don't stop the app - allow it to start even if database fails
     }
 }
 
