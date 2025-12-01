@@ -25,7 +25,9 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Set environment variables
-ENV ASPNETCORE_URLS=http://+:$PORT
+ENV ASPNETCORE_URLS=http://+:80
 ENV ASPNETCORE_ENVIRONMENT=Production
+
+EXPOSE 80
 
 ENTRYPOINT ["dotnet", "ECommerce.API.dll"]
