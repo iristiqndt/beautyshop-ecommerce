@@ -8,7 +8,7 @@ services:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: DATABASE_URL
-        value: postgresql://postgres:Tien2004%40@db.uxvvsiouttuxtnryqizx.supabase.co:5432/postgres
+        value: postgresql://beautyshop:lizH0DfeQ2yITNxqIsnfjqneLj0JW6el@dpg-d4mstge3jp1c73a6tlag-a/beautyshop_k7uo
       - key: Jwt__Secret
         generateValue: true
       - key: Jwt__Issuer
