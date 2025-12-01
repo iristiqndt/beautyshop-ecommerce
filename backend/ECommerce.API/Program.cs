@@ -57,13 +57,17 @@ var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL")
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Railway PostgreSQL format: postgres://user:password@host:port/database
-    // Convert to Npgsql format
-    var uri = new Uri(databaseUrl);
-    var postgresConnectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.Trim('/')};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SSL Mode=Disable";
+    // Railway PostgreSQL - use connection string directly
+    var postgresConnectionString = databaseUrl.Replace("postgres://", "").Replace("postgresql://", "");
+    var parts = postgresConnectionString.Split('@');
+    var userPass = parts[0].Split(':');
+    var hostDbParts = parts[1].Split('/');
+    var hostPort = hostDbParts[0].Split(':');
+    
+    var connString = $"Host={hostPort[0]};Port={hostPort[1]};Database={hostDbParts[1]};Username={userPass[0]};Password={userPass[1]};Pooling=true;Timeout=30;CommandTimeout=30";
     
     builder.Services.AddDbContext<ECommerceDbContext>(options =>
-        options.UseNpgsql(postgresConnectionString,
+        options.UseNpgsql(connString,
             b => b.MigrationsAssembly("ECommerce.Infrastructure")));
 }
 else
