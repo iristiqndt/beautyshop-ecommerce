@@ -152,9 +152,7 @@ app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = Dat
 
 app.MapControllers();
 
-// Database migration - temporarily disabled
-// Will enable after confirming database connection works
-/*
+// Database migration and seeding
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -170,7 +168,6 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while setting up the database.");
     }
 }
-*/
 
 app.Run();
 
