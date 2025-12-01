@@ -24,7 +24,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Don't set ASPNETCORE_URLS - let Railway's HTTP_PORTS/HTTPS_PORTS work
+# Set environment
 ENV ASPNETCORE_ENVIRONMENT=Production
+# Don't override ASPNETCORE_URLS - Railway will set it via HTTP_PORTS
 
 ENTRYPOINT ["dotnet", "ECommerce.API.dll"]

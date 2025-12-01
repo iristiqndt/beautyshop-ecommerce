@@ -57,14 +57,18 @@ var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Railway PostgreSQL - use internal URL for better connection stability
+    // PostgreSQL (Railway or Supabase)
     var postgresConnectionString = databaseUrl.Replace("postgres://", "").Replace("postgresql://", "");
     var parts = postgresConnectionString.Split('@');
     var userPass = parts[0].Split(':');
     var hostDbParts = parts[1].Split('/');
     var hostPort = hostDbParts[0].Split(':');
     
-    var connString = $"Host={hostPort[0]};Port={hostPort[1]};Database={hostDbParts[1]};Username={userPass[0]};Password={userPass[1]};Pooling=true;Timeout=30;CommandTimeout=30;SSL Mode=Prefer;Trust Server Certificate=true";
+    // Check if it's Supabase (requires SSL)
+    var isSupabase = hostPort[0].Contains("supabase.co");
+    var sslMode = isSupabase ? "Require" : "Prefer";
+    
+    var connString = $"Host={hostPort[0]};Port={hostPort[1]};Database={hostDbParts[1]};Username={userPass[0]};Password={userPass[1]};SSL Mode={sslMode};Trust Server Certificate=true;Pooling=true;Timeout=30;CommandTimeout=30";
     
     builder.Services.AddDbContext<ECommerceDbContext>(options =>
         options.UseNpgsql(connString,
