@@ -148,9 +148,7 @@ app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = Dat
 
 app.MapControllers();
 
-// Database migration and seeding - skip on Railway if connection fails
-// App will start but database operations will fail until fixed
-/*
+// Database migration and seeding
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -170,7 +168,6 @@ using (var scope = app.Services.CreateScope())
         // Don't stop the app - allow it to start even if database fails
     }
 }
-*/
 
 app.Run();
 
