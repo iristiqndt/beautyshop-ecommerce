@@ -152,26 +152,25 @@ app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = Dat
 
 app.MapControllers();
 
-// Database migration and seeding
+// Database migration - disabled temporarily for debugging
+// Enable after fixing database connection
+/*
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<ECommerceDbContext>();
-        // Ensure database is created
         await context.Database.EnsureCreatedAsync();
-        
-        // Seed data
         await SeedData(context);
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred while setting up the database.");
-        // Don't stop the app - allow it to start even if database fails
     }
 }
+*/
 
 app.Run();
 
