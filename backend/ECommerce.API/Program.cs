@@ -52,19 +52,19 @@ builder.Services.AddSwaggerGen(c =>
 
 // Database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL") 
-    ?? Environment.GetEnvironmentVariable("DATABASE_URL");
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") 
+    ?? Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL");
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Railway PostgreSQL - use connection string directly
+    // Railway PostgreSQL - use internal URL for better connection stability
     var postgresConnectionString = databaseUrl.Replace("postgres://", "").Replace("postgresql://", "");
     var parts = postgresConnectionString.Split('@');
     var userPass = parts[0].Split(':');
     var hostDbParts = parts[1].Split('/');
     var hostPort = hostDbParts[0].Split(':');
     
-    var connString = $"Host={hostPort[0]};Port={hostPort[1]};Database={hostDbParts[1]};Username={userPass[0]};Password={userPass[1]};Pooling=true;Timeout=30;CommandTimeout=30";
+    var connString = $"Host={hostPort[0]};Port={hostPort[1]};Database={hostDbParts[1]};Username={userPass[0]};Password={userPass[1]};Pooling=true;Timeout=30;CommandTimeout=30;SSL Mode=Prefer;Trust Server Certificate=true";
     
     builder.Services.AddDbContext<ECommerceDbContext>(options =>
         options.UseNpgsql(connString,
