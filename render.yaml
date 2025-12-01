@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: beautyshop-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: DATABASE_URL
+        value: postgresql://postgres:Tien2004%40@db.uxvvsiouttuxtnryqizx.supabase.co:5432/postgres
+      - key: Jwt__Secret
+        generateValue: true
+      - key: Jwt__Issuer
+        value: ECommerceAPI
+      - key: Jwt__Audience
+        value: ECommerceClient
