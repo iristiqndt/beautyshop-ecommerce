@@ -51,10 +51,27 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Database
-builder.Services.AddDbContext<ECommerceDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        b => b.MigrationsAssembly("ECommerce.Infrastructure")));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    // Railway PostgreSQL format: postgres://user:password@host:port/database
+    // Convert to Npgsql format
+    var uri = new Uri(databaseUrl);
+    var postgresConnectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.Trim('/')};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SSL Mode=Require;Trust Server Certificate=true";
+    
+    builder.Services.AddDbContext<ECommerceDbContext>(options =>
+        options.UseNpgsql(postgresConnectionString,
+            b => b.MigrationsAssembly("ECommerce.Infrastructure")));
+}
+else
+{
+    // Local SQL Server
+    builder.Services.AddDbContext<ECommerceDbContext>(options =>
+        options.UseSqlServer(connectionString,
+            b => b.MigrationsAssembly("ECommerce.Infrastructure")));
+}
 
 // JWT Authentication
 var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "YourSuperSecretKeyThatIsAtLeast32CharactersLong!";
