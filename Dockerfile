@@ -24,11 +24,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Railway sets PORT env variable - use it if available, default to 80
-ENV PORT=80
-ENV ASPNETCORE_URLS=http://+:${PORT}
+# Don't set ASPNETCORE_URLS - let Railway's HTTP_PORTS/HTTPS_PORTS work
 ENV ASPNETCORE_ENVIRONMENT=Production
-
-EXPOSE ${PORT}
 
 ENTRYPOINT ["dotnet", "ECommerce.API.dll"]
