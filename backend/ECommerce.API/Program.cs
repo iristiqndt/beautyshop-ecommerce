@@ -145,7 +145,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Database migration and seeding
+// Database migration and seeding - skip on Railway if connection fails
+// App will start but database operations will fail until fixed
+/*
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -165,6 +167,7 @@ using (var scope = app.Services.CreateScope())
         // Don't stop the app - allow it to start even if database fails
     }
 }
+*/
 
 app.Run();
 
