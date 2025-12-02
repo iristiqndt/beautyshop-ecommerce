@@ -11,11 +11,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger with JWT support
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo 
@@ -50,21 +48,18 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") 
     ?? Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL");
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // PostgreSQL (Railway or Supabase)
     var postgresConnectionString = databaseUrl.Replace("postgres://", "").Replace("postgresql://", "");
     var parts = postgresConnectionString.Split('@');
     var userPass = parts[0].Split(':');
     var hostDbParts = parts[1].Split('/');
     var hostPort = hostDbParts[0].Split(':');
     
-    // Check if it's Supabase (requires SSL)
     var isSupabase = hostPort[0].Contains("supabase.co");
     var sslMode = isSupabase ? "Require" : "Prefer";
     
@@ -76,13 +71,11 @@ if (!string.IsNullOrEmpty(databaseUrl))
 }
 else
 {
-    // Local SQL Server
     builder.Services.AddDbContext<ECommerceDbContext>(options =>
         options.UseSqlServer(connectionString,
             b => b.MigrationsAssembly("ECommerce.Infrastructure")));
 }
 
-// JWT Authentication
 var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "YourSuperSecretKeyThatIsAtLeast32CharactersLong!";
 var key = Encoding.ASCII.GetBytes(jwtSecret);
 
@@ -109,7 +102,6 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -120,7 +112,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Dependency Injection
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -131,7 +122,6 @@ builder.Services.AddScoped<PayPalPaymentService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -147,7 +137,6 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Health check endpoint for Railway
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
 app.MapControllers();
